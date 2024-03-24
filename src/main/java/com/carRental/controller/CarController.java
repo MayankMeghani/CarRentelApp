@@ -39,24 +39,24 @@ public class CarController {
 	}
 	
 	@GetMapping("/{id}")
-	public Car getCourse(@PathVariable int id){
+	public Car getCar(@PathVariable int id){
 		return this.carService.findById(id);
 	}
 	
 	@PostMapping("/add")
-	public Car addcar(@RequestBody Car car) {
+	public Car addCars(@RequestBody Car car) {
 		carService.save(car);
 		return car;
 	}
 	
 	@PutMapping("/update")
-	public Car updateUser(@RequestBody Car car) {
+	public Car updateCar(@RequestBody Car car) {
 		carService.save(car);
 		return car;
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public int updateCar(@PathVariable int id) {
+	public int deleteCar(@PathVariable int id) {
 		carService.deleteById(id);
 		return id;
 	}
