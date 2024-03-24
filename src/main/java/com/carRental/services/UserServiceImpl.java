@@ -13,7 +13,7 @@ import com.carRental.entities.User;
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
-	private UserRepository userRepository;
+	UserRepository userRepository;
 	
 	
 

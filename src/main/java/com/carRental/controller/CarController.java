@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.carRental.entities.Booking;
 import com.carRental.entities.Car;
 import com.carRental.services.CarService;
 
@@ -41,6 +42,12 @@ public class CarController {
 	@GetMapping("/{id}")
 	public Car getCar(@PathVariable int id){
 		return this.carService.findById(id);
+	}
+	
+	@GetMapping("/{id}/booking")
+	public Booking FindCarBooking(@PathVariable int car_id){
+//		return this.recordService.findByCar(car_id);
+		return null;
 	}
 	
 	@PostMapping("/add")

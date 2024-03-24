@@ -2,7 +2,7 @@ package com.carRental.entities;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,7 +16,7 @@ public class Renter {
 	private String name;
 	private String email;
 	@OneToMany(mappedBy = "renter")
-//	@JsonBackReference
+	@JsonIgnore
 	private List<Car> cars;
 	
 	public Renter(int id, String name, String email, List<Car> cars) {

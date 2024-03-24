@@ -13,7 +13,7 @@ import com.carRental.entities.Renter;
 public class RenterServiceImpl implements RenterService{
 		
 		@Autowired
-		private RenterRepository renterRepository;
+		RenterRepository renterRepository;
 		
 		public RenterServiceImpl(RenterRepository renterRepository) {
 			super();

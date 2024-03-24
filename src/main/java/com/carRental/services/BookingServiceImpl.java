@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.carRental.dao.BookingRepository;
 import com.carRental.entities.Booking;
+import com.carRental.entities.User;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -38,7 +39,6 @@ public class BookingServiceImpl implements BookingService {
 		}
 		
 		return theRecord;
-		
 
 	}
 
@@ -51,5 +51,16 @@ public class BookingServiceImpl implements BookingService {
 	public void deleteById(int theId) {
 		recordRepository.deleteById(theId);
 	}
+
+//	@Override
+//	public List<Booking> findByUser(User user) {
+//		return recordRepository.FindByUser(user);
+//	}
+	
+
+//	@Override
+//	public Booking findByCar(Car car) {
+//		return recordRepository.FindByUser(car);
+//	}
 
 }

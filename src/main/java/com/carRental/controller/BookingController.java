@@ -43,6 +43,8 @@ public class BookingController {
 			return this.recordService.findById(id);
 		}
 		
+		
+		
 		@PostMapping("/add")
 		public Booking addRecord(@RequestBody Booking record) {
 			recordService.save(record);

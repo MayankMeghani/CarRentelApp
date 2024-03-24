@@ -2,8 +2,7 @@ package com.carRental.entities;
 
 import java.time.Year;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,39 +27,13 @@ public class Car {
 	
 	@ManyToOne
     @JoinColumn(name = "renter_Id")
-//	@JsonManagedReference
 	private Renter renter;
 
 	@OneToOne(mappedBy="car")
-//	@JsonBackReference
+	@JsonIgnore
 	Booking record;
 	
-	public Car(int id, String model, String brand, Year year, int price, int renting_period
-			) {
-		super();
-		this.id = id;
-		this.model = model;
-		this.brand = brand;
-		this.year = year;
-		this.price = price;
-		this.renting_period = renting_period;
-		this.renter = null;
-		this.record = null;
-		this.available = true;
-	}
-	public Car(int id, String model, String brand, Year year, int price, int renting_period,boolean available,
-			Renter renter) {
-		super();
-		this.id = id;
-		this.model = model;
-		this.brand = brand;
-		this.year = year;
-		this.price = price;
-		this.renting_period = renting_period;
-		this.renter = renter;
-		this.record = null;
-		this.available = true;
-	}
+	
 	
 	public Car(int id, String model, String brand, Year year, int price, int renting_period,boolean available, Renter renter,
 			Booking record) {
@@ -73,7 +46,7 @@ public class Car {
 		this.renting_period = renting_period;
 		this.renter = renter;
 		this.record = record;
-		this.available = available;
+		this.available = true;
 	}
 	
 	public Booking getRecord() {

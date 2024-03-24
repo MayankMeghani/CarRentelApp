@@ -1,7 +1,5 @@
 package com.carRental.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -14,12 +12,10 @@ public class Booking {
 	private int id;
 
 	@ManyToOne
-//	@JsonManagedReference
 	@JoinColumn(name = "user_Id")
 	private User user;
 
 	@OneToOne	
-//	@JsonManagedReference
 	@JoinColumn(name = "car_Id")
 	private Car car;
 	
