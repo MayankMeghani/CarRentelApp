@@ -12,8 +12,8 @@ public class Booking {
 	private int id;
 
 	@ManyToOne
-	@JoinColumn(name = "user_Id")
-	private User user;
+	@JoinColumn(name = "customer_Id")
+	private Customer customer;
 
 	@OneToOne	
 	@JoinColumn(name = "car_Id")
@@ -25,16 +25,16 @@ public class Booking {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Booking(int id, Car car, User user) {
+	public Booking(int id, Car car, Customer customer) {
 		super();
 		this.id = id;
 		this.car = car;
-		this.user = user;
+		this.customer = customer;
 	}
 
 	@Override
 	public String toString() {
-		return "Record [id=" + id + ", car=" + car + ", user=" + user + "]";
+		return "Record [id=" + id + ", car=" + car + ", user=" + customer + "]";
 	}
 
 	public int getId() {
@@ -53,12 +53,12 @@ public class Booking {
 		this.car = car;
 	}
 
-	public User getUser() {
-		return user;
+	public Customer getUser() {
+		return customer;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(Customer customer) {
+		this.customer = customer;
 	}
 
 }

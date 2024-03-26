@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.carRental.dao.BookingRepository;
 import com.carRental.entities.Booking;
-import com.carRental.entities.User;
+import com.carRental.entities.Customer;
 
 @Service
 public class BookingServiceImpl implements BookingService {

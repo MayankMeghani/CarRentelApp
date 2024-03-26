@@ -13,24 +13,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Booking;
-import com.carRental.entities.User;
+import com.carRental.entities.Customer;
 import com.carRental.services.BookingService;
-import com.carRental.services.UserService;
+import com.carRental.services.CustomerService;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/customer")
+public class CustomerController {
 
 	@Autowired
-	private UserService userService;
+	private CustomerService customerService;
 	@Autowired
 	private BookingService bookingService;
 
 	
 
-	public UserController(UserService userService, BookingService bookingService) {
+	public CustomerController(CustomerService customerService, BookingService bookingService) {
 		super();
-		this.userService = userService;
+		this.customerService = customerService;
 		this.bookingService = bookingService;
 	}
 
@@ -39,38 +39,38 @@ public class UserController {
 		return "welcome to home";
 	}
 	
-	@GetMapping("/users")
-	public List<User> getUsers(){
-		return this.userService.findAll();
+	@GetMapping("/customers")
+	public List<Customer> getUsers(){
+		return this.customerService.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public User getUser(@PathVariable int id){
-		return this.userService.findById(id);
+	public Customer getUser(@PathVariable int id){
+		return this.customerService.findById(id);
 	}
 	
 	@GetMapping("/{id}/bookings")
 	public List<Booking> getUserBookings(@PathVariable int id){
-		User user=userService.findById(id);
+		Customer customer=customerService.findById(id);
 //		return this.bookingService.findByUser(user);
 		return null;
 	}
 	
 	@PostMapping("/add")
-	public User addUser( @RequestBody User user) {
-		userService.save(user);
-		return user;
+	public Customer addUser( @RequestBody Customer customer) {
+		customerService.save(customer);
+		return customer;
 	}
 	
 	@PutMapping("/update")
-	public User updateUser(@RequestBody User user) {
-		userService.save(user);
-		return user;
+	public Customer updateUser(@RequestBody Customer customer) {
+		customerService.save(customer);
+		return customer;
 	}
 	
 	@DeleteMapping("/delete/{id}")
 	public int deleteUser(@PathVariable int id) {
-		userService.deleteById(id);
+		customerService.deleteById(id);
 		return id;
 	}
 }

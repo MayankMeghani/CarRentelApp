@@ -9,24 +9,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class User {
+public class Customer {
 	@Id
 	private int id;
 	private String name;
 	private String email;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="customer")
 	@JsonIgnore
 	List<Booking> records;
 	
 	
-	public User() {
+	public Customer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
 
-	public User(int id, String name, String email, List<Booking> records) {
+	public Customer(int id, String name, String email, List<Booking> records) {
 		super();
 		this.id = id;
 		this.name = name;
