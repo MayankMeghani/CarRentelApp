@@ -9,58 +9,36 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Customer {
-	@Id
-	private int id;
-	private String name;
-	private String email;
-	
+public class Customer extends Person{
+	private String licence_no;
 	@OneToMany(mappedBy="customer")
 	@JsonIgnore
 	List<Booking> records;
-	
-	
-	public Customer() {
-		super();
-		// TODO Auto-generated constructor stub
+	public String getLicence_no() {
+		return licence_no;
 	}
-	
-
-	public Customer(int id, String name, String email, List<Booking> records) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.records = records;
+	public void setLicence_no(String licence_no) {
+		this.licence_no = licence_no;
 	}
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", email=" + email + ", records=" + records + "]";
-	}
-
 	public List<Booking> getRecords() {
 		return records;
 	}
 	public void setRecords(List<Booking> records) {
 		this.records = records;
 	}
-	public int getId() {
-		return id;
+	@Override
+	public String toString() {
+		return "Customer [licence_no=" + licence_no + ", records=" + records + "]";
 	}
-	public void setId(int id) {
-		this.id = id;
+	public Customer(String licence_no, List<Booking> records) {
+		super();
+		this.licence_no = licence_no;
+		this.records = records;
 	}
-	public String getName() {
-		return name;
+	public Customer() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	
 
 }

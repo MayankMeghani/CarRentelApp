@@ -27,7 +27,7 @@ public class PersonController {
 	PersonRepository personRepository;
 
     @GetMapping("/persons")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<Person> all()
     {
@@ -35,7 +35,7 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('MANAGER','USER','ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Person userById(@PathVariable Long id)
     {
         if(personRepository.findById(id).isEmpty())
@@ -46,7 +46,7 @@ public class PersonController {
         return optionalUser.orElse(null);
     }
     @PostMapping("/add")
-    @PreAuthorize("hasAnyRole('MANAGER','USER','ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Person addUser(@RequestBody Person person)
     {
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
@@ -56,7 +56,7 @@ public class PersonController {
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Person updateUser(@PathVariable Long id, @RequestBody Person user)
     {
         if(personRepository.findById(id).isEmpty())
@@ -67,7 +67,7 @@ public class PersonController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable Long id)
     {
         if(personRepository.findById(id).isEmpty())

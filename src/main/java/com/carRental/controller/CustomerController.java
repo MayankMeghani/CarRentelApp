@@ -3,6 +3,7 @@ package com.carRental.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,22 +34,28 @@ public class CustomerController {
 		this.customerService = customerService;
 		this.bookingService = bookingService;
 	}
-
+	
 	@GetMapping("/home")
 	public String home() {
 		return "welcome to home";
 	}
 	
+
+    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
 	@GetMapping("/customers")
 	public List<Customer> getUsers(){
 		return this.customerService.findAll();
 	}
 	
+
+    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
 	@GetMapping("/{id}")
 	public Customer getUser(@PathVariable int id){
 		return this.customerService.findById(id);
 	}
 	
+
+    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
 	@GetMapping("/{id}/bookings")
 	public List<Booking> getUserBookings(@PathVariable int id){
 		Customer customer=customerService.findById(id);
@@ -56,18 +63,24 @@ public class CustomerController {
 		return null;
 	}
 	
+
+    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
 	@PostMapping("/add")
 	public Customer addUser( @RequestBody Customer customer) {
 		customerService.save(customer);
 		return customer;
 	}
 	
+
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
 	@PutMapping("/update")
 	public Customer updateUser(@RequestBody Customer customer) {
 		customerService.save(customer);
 		return customer;
 	}
 	
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
 	@DeleteMapping("/delete/{id}")
 	public int deleteUser(@PathVariable int id) {
 		customerService.deleteById(id);

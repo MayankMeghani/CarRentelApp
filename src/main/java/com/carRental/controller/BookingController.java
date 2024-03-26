@@ -3,6 +3,7 @@ package com.carRental.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,30 +34,39 @@ public class BookingController {
 			return "welcome to home";
 		}
 		
+
+	    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 		@GetMapping("/records")
 		public List<Booking> getRecords(){
 			return this.recordService.findAll();
 		}
 		
+
+	    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 		@GetMapping("/{id}")
 		public Booking getRecord(@PathVariable int id){
 			return this.recordService.findById(id);
 		}
 		
 		
-		
+
+	    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
 		@PostMapping("/add")
 		public Booking addRecord(@RequestBody Booking record) {
 			recordService.save(record);
 			return record;
 		}
 		
+
+	    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 		@PutMapping("/update")
 		public Booking updateRecord(@RequestBody Booking record) {
 			recordService.save(record);
 			return record;
 		}
 		
+
+	    @PreAuthorize("hasRole('ADMIN')")
 		@DeleteMapping("/delete/{id}")
 		public int deleteRecord(@PathVariable int id) {
 			recordService.deleteById(id);
