@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.carRental.dao.CarRepository;
 import com.carRental.entities.Car;
-import com.carRental.entities.Renter;
+import com.carRental.entities.Person;
 
 @Service
 public class CarServiceImpl implements CarService{
@@ -55,7 +55,7 @@ public class CarServiceImpl implements CarService{
 	}
 
 	@Override
-	public List<Car> findByRenter(Renter theRenter) {
+	public List<Car> findByRenter(Person theRenter) {
 		List<Car> cars= carRepository.findByRenter(theRenter);
 		return cars;
 	}

@@ -19,61 +19,51 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.dao.PersonRepository;
 import com.carRental.entities.Person;
+import com.carRental.entities.Role;
+import com.carRental.services.PersonService;
 @RestController
 @RequestMapping("/person")
 public class PersonController {
 
 	@Autowired
-	PersonRepository personRepository;
+	PersonService personService;
 
     @GetMapping("/persons")
     @PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
     public List<Person> all()
     {
-        return personRepository.findAll();
+        return personService.findAll();
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Person userById(@PathVariable int id)
-    {
-        if(personRepository.findById(id).isEmpty())
-        {
-            throw new UsernameNotFoundException("No Such User Found");
-        }
-        Optional<Person> optionalUser = personRepository.findById(id);
-        return optionalUser.orElse(null);
+    public Person userById(@PathVariable int id){
+    	return personService.findById(id);
     }
+    
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public Person addUser(@RequestBody Person person)
-    {
+    public Person addUser(@RequestBody Person person){
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        personRepository.save(person);
+        Role role=new Role(1,"ADMIN",null);
+        person.setRole(role);
+        personService.save(person);
         return person;
     }
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Person updateUser(@PathVariable int id, @RequestBody Person user)
-    {
-        if(personRepository.findById(id).isEmpty())
-        {
-            throw new UsernameNotFoundException("No Such User Found");
-        }
-        return personRepository.save(user);
+    public Person updateUser(@PathVariable int id, @RequestBody Person person){
+		personService.save(person); 
+    	return person;
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(@PathVariable int id)
-    {
-        if(personRepository.findById(id).isEmpty())
-        {
-            throw new UsernameNotFoundException("No Such User Found");
-        }
-        personRepository.deleteById(id);
+    public int deleteUser(@PathVariable int id){
+    	personService.deleteById(id);
+    	return id;
     }
 }

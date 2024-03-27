@@ -5,15 +5,19 @@ import java.util.List;
 import com.carRental.entities.Car;
 import com.carRental.entities.Person;
 
-public interface CarService {
-	List<Car> findAll();
+
+public interface PersonService {
+
+
+	List<Person> findAll();
 	
-	Car findById(int theId);
+	Person findById(int theId);
 	
-	List<Car> findByRenter(Person theRenter);
-	
-	void save(Car theRenter);
+	void save(Person thePerson);
 	
 	void deleteById(int theId);
 	
+	Car FindCarByrenter(int renter_id,int car_id);
+
+
 }

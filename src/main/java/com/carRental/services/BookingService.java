@@ -3,7 +3,6 @@ package com.carRental.services;
 import java.util.List;
 
 import com.carRental.entities.Booking;
-import com.carRental.entities.Customer;
 
 public interface BookingService {
 

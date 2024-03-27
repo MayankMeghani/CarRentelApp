@@ -1,5 +1,6 @@
 package com.carRental.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Booking;
 import com.carRental.entities.Car;
-import com.carRental.entities.Renter;
+import com.carRental.entities.Person;
 import com.carRental.services.CarService;
-import com.carRental.services.RenterService;
+import com.carRental.services.PersonService;
 
 @RestController
 @RequestMapping("/car")
@@ -27,7 +28,7 @@ public class CarController {
 	@Autowired
 	private CarService carService;
 	@Autowired
-	private RenterService renterService;
+	private PersonService personService;
 	
 	public CarController(CarService carService) {
 		super();
@@ -45,7 +46,19 @@ public class CarController {
 	public List<Car> getCars(){
 		return this.carService.findAll();
 	}
-	
+    
+    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
+	@GetMapping("/available")
+	public List<Car> getAvailableCars(){
+		List<Car> cars=carService.findAll();
+		List<Car>available=new ArrayList<Car>();
+		for(Car c:cars) {
+			if(c.isAvailable()) {
+				available.add(c);
+			}
+		}
+		return available;
+	}
 
     @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 	@GetMapping("/{id}")
@@ -53,6 +66,12 @@ public class CarController {
 		return this.carService.findById(id);
 	}
 	
+    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
+	@GetMapping("/{id}/renter")
+	public Person getCarRenter(@PathVariable int id){
+		Car car=carService.findById(id);
+		return car.getRenter();
+	}
 
     @PreAuthorize("hasAnyRole('RENTER','ADMIN')")
 	@GetMapping("/{id}/booking")
@@ -66,11 +85,14 @@ public class CarController {
 	@PostMapping("/add")
 	public Car addCars(@RequestBody Car car) {
     	int id= car.getRenter().getId();
-		Renter renter = renterService.findById(id);
+		Person renter = personService.findById(id);
+		if((renter.getRole().getRole()).equals("RENTER")) {
     	car.setRenter(renter);
     	car.setAvailable(true);
 		carService.save(car);
 		return car;
+		}
+		return null;
 	}
 	
 

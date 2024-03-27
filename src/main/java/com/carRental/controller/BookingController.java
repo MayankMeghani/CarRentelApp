@@ -14,14 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Booking;
+import com.carRental.entities.Car;
+import com.carRental.entities.Person;
 import com.carRental.services.BookingService;
+import com.carRental.services.CarService;
+import com.carRental.services.PersonService;
 
 @RestController
-@RequestMapping("/record")
+@RequestMapping("/booking")
 public class BookingController {
 
 		@Autowired
 		BookingService recordService;
+		@Autowired
+		CarService carService;
+		@Autowired
+		PersonService personService;
 
 		public BookingController(BookingService recordService) {
 			super();
@@ -36,7 +44,7 @@ public class BookingController {
 		
 
 	    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
-		@GetMapping("/records")
+		@GetMapping("/bookings")
 		public List<Booking> getRecords(){
 			return this.recordService.findAll();
 		}
@@ -47,14 +55,31 @@ public class BookingController {
 		public Booking getRecord(@PathVariable int id){
 			return this.recordService.findById(id);
 		}
-		
+	    
+	    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
+		@GetMapping("/{id}/renter")
+		public Person getRenterBybooking(@PathVariable int id){
+	    	Booking record=recordService.findById(id);
+	    	Car car=record.getCar();
+	    	return car.getRenter();
+	    }
 		
 
 	    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
 		@PostMapping("/add")
 		public Booking addRecord(@RequestBody Booking record) {
+			Car car= carService.findById(record.getCar().getId());
+	    	Person customer = personService.findById(record.getCustomer().getId());
+	    	if( car.isAvailable() && (customer.getRole().getRole()).equals("CUSTOMER") ) {
+		    car.setAvailable(false);
+	    	carService.save(car);
+	    	record.setCar(car);
+	    	record.setCustomer(customer);
 			recordService.save(record);
 			return record;
+			}
+	    	
+	    	return null;
 		}
 		
 
@@ -69,7 +94,11 @@ public class BookingController {
 	    @PreAuthorize("hasRole('ADMIN')")
 		@DeleteMapping("/delete/{id}")
 		public int deleteRecord(@PathVariable int id) {
-			recordService.deleteById(id);
+	    	Booking record = recordService.findById(id);
+	    	Car car=record.getCar();
+	    	car.setAvailable(true);
+	    	carService.save(car);
+	    	recordService.deleteById(id);
 			return id;
 		}
 		

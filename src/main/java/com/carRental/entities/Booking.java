@@ -1,6 +1,8 @@
 package com.carRental.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -9,14 +11,15 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Booking {
 	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@ManyToOne
-	@JoinColumn(name = "customer_Id")
-	private Customer customer;
+	@JoinColumn(name = "customer_Id",nullable =false)
+	private Person customer;
 
 	@OneToOne	
-	@JoinColumn(name = "car_Id")
+	@JoinColumn(name = "car_Id",nullable=false)
 	private Car car;
 	
 
@@ -25,7 +28,7 @@ public class Booking {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Booking(int id, Car car, Customer customer) {
+	public Booking(int id, Car car, Person customer) {
 		super();
 		this.id = id;
 		this.car = car;
@@ -53,11 +56,11 @@ public class Booking {
 		this.car = car;
 	}
 
-	public Customer getUser() {
+	public Person getCustomer() {
 		return customer;
 	}
 
-	public void setUser(Customer customer) {
+	public void setCustomer(Person customer) {
 		this.customer = customer;
 	}
 

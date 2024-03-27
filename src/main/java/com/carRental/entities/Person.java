@@ -1,5 +1,9 @@
 package com.carRental.entities;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +13,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,21 +22,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
 public class Person {
 	    @Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private int id;
-	    @Column(name = "first_name", nullable = false, length = 50)
+	    @Column(name = "first_name", nullable = false)
 	    private String firstName;
 
-	    @Column(name = "last_name", nullable = false, length = 50)
+	    @Column(name = "last_name", nullable = false)
 	    private String lastName;
 
-	    @Column(name = "username", nullable = false, unique = true, length = 50)
+	    @Column(name = "username", nullable = false, unique = true)
 	    private String username;
 
-	    @Column(name = "email", nullable = false, unique = true, length = 50)
+	    @Column(name = "email", nullable = false, unique = true)
 	    private String email;
 
 	    @Column(name = "password", nullable = false, length = 255)
@@ -39,24 +43,39 @@ public class Person {
 
 	    @Column(name = "phone_no", nullable = false, unique = true, length = 10)
 	    private String phoneNo;
-	    
+
+	    @JsonIgnore
 	    @ManyToOne
 	    @JoinColumn(name="Role", nullable = false)
 	    private Role role;
 	    
-	    @Override
-	    public String toString() {
-	        return "User{" +
-	                "id=" + id +
-	                ", firstName='" + firstName + '\'' +
-	                ", lastName='" + lastName + '\'' +
-	                ", userName='" + username + '\'' +
-	                ", email='" + email + '\'' +
-	                ", password='" + password + '\'' +
-	                ", phoneNo='" + phoneNo + '\'' +
-	                ", role='" + role + '\'' +
-	                '}';
-	    }
+
+		@OneToMany(mappedBy = "renter")
+		@JsonIgnore
+		private List<Car> cars;
+		
+
+		@OneToMany(mappedBy="customer")
+		@JsonIgnore
+		List<Booking> records;
+	    
+	    
+
+		public List<Booking> getRecords() {
+			return records;
+		}
+
+		public List<Car> getCars() {
+			return cars;
+		}
+
+		public void setCars(List<Car> cars) {
+			this.cars = cars;
+		}
+
+		public void setRecords(List<Booking> records) {
+			this.records = records;
+		}
 
 		public Role getRole() {
 			// TODO Auto-generated method stub
