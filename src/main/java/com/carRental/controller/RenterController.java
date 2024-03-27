@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Car;
 import com.carRental.entities.Renter;
+import com.carRental.entities.Role;
 import com.carRental.services.CarService;
 import com.carRental.services.RenterService;
 
@@ -76,9 +77,12 @@ public class RenterController {
 
     @PreAuthorize("hasAnyRole('RENTER','ADMIN')")
 	@PostMapping("/add")
-	public Renter addRenter(@RequestBody Renter user) {
-		renterService.save(user);
-		return user;
+	public Renter addRenter(@RequestBody Renter renter) {
+    	
+		Role role= new Role(2,"RENTER",null);
+		renter.setRole(role);
+		renterService.save(renter);
+		return renter;
 	}
 	
 

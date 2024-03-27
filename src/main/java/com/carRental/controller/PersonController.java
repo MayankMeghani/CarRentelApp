@@ -36,7 +36,7 @@ public class PersonController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Person userById(@PathVariable Long id)
+    public Person userById(@PathVariable int id)
     {
         if(personRepository.findById(id).isEmpty())
         {
@@ -57,7 +57,7 @@ public class PersonController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Person updateUser(@PathVariable Long id, @RequestBody Person user)
+    public Person updateUser(@PathVariable int id, @RequestBody Person user)
     {
         if(personRepository.findById(id).isEmpty())
         {
@@ -68,7 +68,7 @@ public class PersonController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(@PathVariable Long id)
+    public void deleteUser(@PathVariable int id)
     {
         if(personRepository.findById(id).isEmpty())
         {

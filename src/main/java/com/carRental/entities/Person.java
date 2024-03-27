@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
 public class Person {
 	    @Id
-//	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    private Long id;
+	    @GeneratedValue(strategy = GenerationType.AUTO)
+	    private int id;
 	    @Column(name = "first_name", nullable = false, length = 50)
 	    private String firstName;
 
@@ -67,12 +67,12 @@ public class Person {
 			this.role=role;
 		}
 
-		public Long getId() {
+		public int getId() {
 			return id;
 		}
 
 
-		public void setId(Long id) {
+		public void setId(int id) {
 			this.id = id;
 		}
 

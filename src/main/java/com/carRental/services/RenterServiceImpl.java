@@ -39,6 +39,7 @@ public class RenterServiceImpl implements RenterService{
 
 		@Override
 		public Renter findById(int theId) {
+			
 			Optional<Renter> result = renterRepository.findById(theId);
 			
 			Renter theRenter = null;

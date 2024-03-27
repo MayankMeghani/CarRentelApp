@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Booking;
 import com.carRental.entities.Customer;
+import com.carRental.entities.Role;
 import com.carRental.services.BookingService;
 import com.carRental.services.CustomerService;
 
@@ -41,21 +42,21 @@ public class CustomerController {
 	}
 	
 
-    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 	@GetMapping("/customers")
 	public List<Customer> getUsers(){
 		return this.customerService.findAll();
 	}
 	
 
-    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 	@GetMapping("/{id}")
 	public Customer getUser(@PathVariable int id){
 		return this.customerService.findById(id);
 	}
 	
 
-    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 	@GetMapping("/{id}/bookings")
 	public List<Booking> getUserBookings(@PathVariable int id){
 		Customer customer=customerService.findById(id);
@@ -64,15 +65,17 @@ public class CustomerController {
 	}
 	
 
-    @PreAuthorize("hasAnyRole('USER','RENTER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 	@PostMapping("/add")
 	public Customer addUser( @RequestBody Customer customer) {
+    	Role role= new Role(3,"CUSTOMER",null);
+		customer.setRole(role);
 		customerService.save(customer);
 		return customer;
 	}
 	
 
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
 	@PutMapping("/update")
 	public Customer updateUser(@RequestBody Customer customer) {
 		customerService.save(customer);

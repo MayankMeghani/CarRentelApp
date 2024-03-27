@@ -1,6 +1,7 @@
 package com.carRental.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Booking;
 import com.carRental.entities.Car;
+import com.carRental.entities.Renter;
 import com.carRental.services.CarService;
+import com.carRental.services.RenterService;
 
 @RestController
 @RequestMapping("/car")
@@ -23,8 +26,9 @@ public class CarController {
 
 	@Autowired
 	private CarService carService;
-
-
+	@Autowired
+	private RenterService renterService;
+	
 	public CarController(CarService carService) {
 		super();
 		this.carService = carService;
@@ -61,6 +65,10 @@ public class CarController {
     @PreAuthorize("hasAnyRole('RENTER','ADMIN')")
 	@PostMapping("/add")
 	public Car addCars(@RequestBody Car car) {
+    	int id= car.getRenter().getId();
+		Renter renter = renterService.findById(id);
+    	car.setRenter(renter);
+    	car.setAvailable(true);
 		carService.save(car);
 		return car;
 	}

@@ -22,27 +22,6 @@ public class Role {
     @OneToMany(mappedBy="role")
     private List<Person> persons;
     
-    
-    public enum UserRole {
-        USER,
-        ADMIN,
-        MANAGER
-    }
-    public void setRole(String role) {
-        if (!isValidRole(role)) {
-            throw new IllegalArgumentException("Invalid role: " + role);
-        }
-        this.role = role;
-    }
-
-    private boolean isValidRole(String role) {
-        for (UserRole userRole : UserRole.values()) {
-            if (userRole.name().equals(role)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 	public int getId() {
 		return id;
