@@ -1,12 +1,15 @@
-package com.carRental.controller;
+package com.carRental.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.carRental.entities.Car;
 import com.carRental.entities.Person;
 import com.carRental.entities.Role;
+import com.carRental.exception.NotFoundException;
 import com.carRental.services.CarService;
 import com.carRental.services.PersonService;
 
@@ -31,7 +35,20 @@ public class RenterController {
 	PersonService personService;
 	@Autowired
 	CarService carService;
+	
 
+	@GetMapping("")
+	public String home() {
+		return "Welcome to Reter Section "
+				+ "<br> For All renter :  renter/renters"
+				+ "<br> For particular renter :  renter/{id}"
+				+ "<br> For finding cars of renter :  renter/{id}/cars"
+				+ "<br> For particular car of renter :  renter/{renter_id}/{car_id}"
+				+ "<br> For adding renter :  renter/add"
+				+ "<br> To update renter :  renter/update"
+				+ "<br> To delete renter :  renter/delete/{id}";
+	}
+	
     @GetMapping("/renters")
     @PreAuthorize("hasAnyRole('ADMIN','RENTER','CUSTOMER')")
     @ResponseBody
@@ -53,7 +70,9 @@ public class RenterController {
     	if((p.getRole().getRole()).equals("RENTER")) {
     		return p;
     	}
-    	return null;
+    	else {
+    		throw new NotFoundException("No Renter is registerd for given Id");
+    	}
     }
     
     @GetMapping("/{id}/cars")
@@ -64,7 +83,9 @@ public class RenterController {
     		List<Car> owned=p.getCars();
     		return owned;
     	}
-    	return null;
+    	else {
+			throw new NotFoundException("No Renter is registerd for given Id");
+    	}
     }
     
     @GetMapping("/{renter_id}/{car_id}")
@@ -84,7 +105,7 @@ public class RenterController {
         return person;
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN','RENTER')")
     public Person updateUser(@PathVariable int id, @RequestBody Person person){
     	person.setId(id);
@@ -92,7 +113,9 @@ public class RenterController {
 		personService.save(person); 
     	return person;
     	}
-    	return null;
+    	else {
+			throw new NotFoundException("No Renter is registerd for given Id");
+    	}
     }
 
     @DeleteMapping("/delete/{id}")
@@ -103,8 +126,15 @@ public class RenterController {
     	personService.deleteById(id);
     	return id;
     	}
-    	return 0;
+    	else {
+			throw new NotFoundException("No Renter is registerd for given Id");
+    	}
     }
 
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleBookingException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 
 }

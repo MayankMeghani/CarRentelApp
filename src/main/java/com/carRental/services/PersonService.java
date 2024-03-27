@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.carRental.entities.Car;
 import com.carRental.entities.Person;
+import com.carRental.entities.Role;
 
 
 public interface PersonService {
 
+	List<Person> findByRole(Role role);
 
 	List<Person> findAll();
 	

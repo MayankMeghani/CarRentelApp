@@ -143,4 +143,30 @@ public class Person {
 			this.phoneNo = phoneNo;
 		}
 
+		public Person(int id, String firstName, String lastName, String username, String email, String password,
+				String phoneNo, Role role, List<Car> cars, List<Booking> records) {
+			super();
+			this.id = id;
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.username = username;
+			this.email = email;
+			this.password = password;
+			this.phoneNo = phoneNo;
+			this.role = role;
+			this.cars = cars;
+			this.records = records;
+		}
+
+		public Person() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public Person(int id) {
+			super();
+			this.id = id;
+		}
+
+		
 }

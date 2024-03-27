@@ -37,7 +37,7 @@ public class Car {
 	boolean available;
 	
 
-    @JsonIgnore
+//    @JsonIgnore
 	@ManyToOne
     @JoinColumn(name = "renter_Id")
 	private Person renter;

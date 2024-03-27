@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.carRental.dao.RoleRepository;
 import com.carRental.entities.Role;
+import com.carRental.exception.NotFoundException;
 
 @Service
 public class RoleServiceImpl implements RoleService{
@@ -18,7 +22,6 @@ public class RoleServiceImpl implements RoleService{
 	
 	public RoleServiceImpl() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public RoleServiceImpl(RoleRepository roleRepository) {
@@ -28,7 +31,13 @@ public class RoleServiceImpl implements RoleService{
 
 	@Override
 	public List<Role> findAll() {
-		return roleRepository.findAll();
+		List<Role> roles= roleRepository.findAll();
+		if(roles.isEmpty()) {
+			throw new NotFoundException("Did not Any role");
+		}
+		else {
+			return roles;
+		}
 	}
 
 	@Override
@@ -41,7 +50,7 @@ public class RoleServiceImpl implements RoleService{
 			theRole = result.get();
 		}
 		else {
-			throw new RuntimeException("Did not find renter id - " + theId);
+			throw new NotFoundException("No role is Found for given Id");	
 		}
 		
 		return theRole;
@@ -63,4 +72,8 @@ public class RoleServiceImpl implements RoleService{
 //		return roleRepository.FindByRole(role);
 //	}
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleBookingException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }
