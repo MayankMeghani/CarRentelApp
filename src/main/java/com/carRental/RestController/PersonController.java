@@ -106,6 +106,7 @@ public class PersonController {
     		throw new NotFoundException("No Admin is registerd for given Id");
     	}
     }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleBookingException(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

@@ -33,11 +33,9 @@ public class RoleServiceImpl implements RoleService{
 	public List<Role> findAll() {
 		List<Role> roles= roleRepository.findAll();
 		if(roles.isEmpty()) {
-			throw new NotFoundException("Did not find Any role");
+//			throw new NotFoundException("Did not find Any role");
 		}
-		else {
 			return roles;
-		}
 	}
 
 	@Override
@@ -67,7 +65,6 @@ public class RoleServiceImpl implements RoleService{
 		roleRepository.deleteById(theId);
 	}
 
-
 	@Override
 	public Role findByRole(String role) {
 		Role r=roleRepository.findByRole(role);
@@ -81,4 +78,6 @@ public class RoleServiceImpl implements RoleService{
     public ResponseEntity<String> handleBookingException(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+	
 }

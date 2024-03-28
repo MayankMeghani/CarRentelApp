@@ -38,7 +38,6 @@ public class RenterController {
 	CarService carService;
 	@Autowired
 	RoleService roleService;
-	
 
 	@GetMapping("")
 	public String home() {
