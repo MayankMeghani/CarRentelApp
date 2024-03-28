@@ -4,6 +4,7 @@ import java.time.Year;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,8 +19,8 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 @Table(
 	    uniqueConstraints = {
-	        @UniqueConstraint(name = "unique", columnNames = {"model","brand"})
-	    })
+	        @UniqueConstraint(name = "unique", columnNames = {"model","brand"})}
+	    )
 public class Car {
 
 	@Id
@@ -32,17 +33,16 @@ public class Car {
 	@Column(columnDefinition = "SMALLINT", nullable=false)
     private Year year;
 	private int price;
-	@Column(columnDefinition = "SMALLINT",nullable=false)
-	private int renting_period;
+	private int rentingPeriod;
 	boolean available;
 	
 
-    @JsonIgnore
+//    @JsonIgnore
 	@ManyToOne
-    @JoinColumn(name = "renter_Id")
+    @JoinColumn(name = "renter_Id",nullable=false)
 	private Person renter;
 
-	@OneToOne(mappedBy="car")
+	@OneToOne(mappedBy="car",cascade =CascadeType.REMOVE)
 	@JsonIgnore
 	Booking record;
 	
@@ -96,17 +96,17 @@ public class Car {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public int getRenting_period() {
-		return renting_period;
+	public int getRentingPeriod() {
+		return rentingPeriod;
 	}
-	public void setRenting_period(int renting_period) {
-		this.renting_period = renting_period;
+	public void setgetRentingPeriod(int renting_period) {
+		this.rentingPeriod = renting_period;
 	}
 	
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", model=" + model + ", brand=" + brand + ", year=" + year + ", price=" + price
-				+ ", renting_period=" + renting_period + ", available=" + available + ", renter=" + renter + ", record="
+				+ ", renting_period=" + rentingPeriod + ", available=" + available + ", renter=" + renter + ", record="
 				+ record + "]";
 	}
 	public Car() {
@@ -120,7 +120,7 @@ public class Car {
 		this.brand = brand;
 		this.year = year;
 		this.price = price;
-		this.renting_period = renting_period;
+		this.rentingPeriod = renting_period;
 		this.available = available;
 		this.renter = renter;
 		this.record = record;

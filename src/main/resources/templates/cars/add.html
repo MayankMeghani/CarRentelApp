@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Car</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-4 mb-3">Add Car</h2>
+        <form action="#" th:action="@{/cars/save}" method="POST" th:object="${car}" >
+    <!-- Corrected typo in th:field -->
+		    <input type="hidden" th:field="*{id}" />
+
+            <div class="mb-3">
+                <label for="brand" class="form-label">Brand</label>
+                <input type="text" th:field="*{brand}" id="brand" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="model" class="form-label">Model</label>
+                <input type="text" th:field="*{model}" id="model" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="year" class="form-label">Year</label>
+                <input type="number" th:field="*{year}" id="year" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" th:field="*{price}" id="price" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="rentingPeriod" class="form-label">Renting Period(in Days)</label>
+                <input type="number" th:field="*{rentingPeriod}" id="rentingPeriod" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="renter" class="form-label">Renter</label>
+                <select th:field="*{renter.id}" id="renter" class="form-control" required>
+                    <!-- Populate the dropdown options with data fetched from the database -->
+                    <option th:each="renter : ${renters}" th:value="${renter.id}"
+                        th:text="${renter.firstName + ' ' + renter.lastName}"></option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/cars/list}" class="btn btn-warning">Back to List</a>
+            
+        </form>
+    </div>
+
+</body>
+
+</html>

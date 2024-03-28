@@ -4,10 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.carRental.dao.BookingRepository;
 import com.carRental.entities.Booking;
+import com.carRental.entities.Car;
+import com.carRental.entities.Person;
+import com.carRental.exception.NotFoundException;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -21,7 +27,11 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public List<Booking> findAll() {
-		return recordRepository.findAll();
+		List<Booking> bookings =recordRepository.findAll();
+		if(bookings.isEmpty()) {
+//			throw new NotFoundException("Did not find any record");
+		}
+		return bookings;	
 	}
 
 	@Override
@@ -34,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
 			theRecord = result.get();
 		}
 		else {
-			throw new RuntimeException("Did not find record id - " + theId);
+			throw new NotFoundException("Did not find record with given id");
 		}
 		
 		return theRecord;
@@ -42,8 +52,8 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public void save(Booking record) {
-		recordRepository.save(record);
+	public void save(Booking booking) {
+		recordRepository.save(booking);
 	}
 
 	@Override
@@ -51,15 +61,31 @@ public class BookingServiceImpl implements BookingService {
 		recordRepository.deleteById(theId);
 	}
 
-//	@Override
-//	public List<Booking> findByUser(User user) {
-//		return recordRepository.FindByUser(user);
-//	}
+	@Override
+	public Booking findByCar(Car car) {
+		Booking record =recordRepository.findByCar(car);
+		if(record==null) {
+			throw new NotFoundException("Did not find record for given car");			
+		}
+		else 
+			return record;
+	}
+
+	@Override
+	public List<Booking> findByCustomer(Person customer) {
+		List<Booking> bookings= recordRepository.findByCustomer(customer);
+		if(bookings.isEmpty()) {
+//			throw new NotFoundException("Did not find record for given customer");	
+		}
+
+			return bookings;
+		
+	}
 	
 
-//	@Override
-//	public Booking findByCar(Car car) {
-//		return recordRepository.FindByUser(car);
-//	}
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleBookingException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 
 }

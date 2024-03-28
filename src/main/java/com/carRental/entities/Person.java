@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,12 +51,12 @@ public class Person {
 	    private Role role;
 	    
 
-		@OneToMany(mappedBy = "renter")
+		@OneToMany(mappedBy = "renter", cascade=CascadeType.REMOVE)
 		@JsonIgnore
 		private List<Car> cars;
 		
 
-		@OneToMany(mappedBy="customer")
+		@OneToMany(mappedBy="customer", cascade=CascadeType.REMOVE)
 		@JsonIgnore
 		List<Booking> records;
 	    
@@ -143,4 +144,30 @@ public class Person {
 			this.phoneNo = phoneNo;
 		}
 
+		public Person(int id, String firstName, String lastName, String username, String email, String password,
+				String phoneNo, Role role, List<Car> cars, List<Booking> records) {
+			super();
+			this.id = id;
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.username = username;
+			this.email = email;
+			this.password = password;
+			this.phoneNo = phoneNo;
+			this.role = role;
+			this.cars = cars;
+			this.records = records;
+		}
+
+		public Person() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public Person(int id) {
+			super();
+			this.id = id;
+		}
+
+		
 }

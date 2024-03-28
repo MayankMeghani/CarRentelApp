@@ -1,4 +1,4 @@
-package com.carRental.controller;
+package com.carRental.RestController;
 
 import java.util.List;
 
@@ -27,11 +27,17 @@ public class RoleController {
 		this.roleService=roleService;
 		}
 
-	@GetMapping("/home")
+
+	@GetMapping("")
 	public String home() {
-		return "welcome to home";
+		return "Welcome to Role Section "
+				+ "<br> For All roles :  role/roles"
+				+ "<br> For particular role :  role/{id}"
+				+ "<br> For adding role :  role/add"
+				+ "<br> To update role :  role/update"
+				+ "<br> To delete role :  role/delete/{id}";
 	}
-	
+
 
     @PreAuthorize("hasAnyRole('ADMIN')")
 	@GetMapping("/roles")

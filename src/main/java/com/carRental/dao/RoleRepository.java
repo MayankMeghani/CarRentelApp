@@ -6,5 +6,5 @@ import com.carRental.entities.Role;
 
 public interface RoleRepository extends JpaRepository<Role,Integer> {
 
-//	Role FindByRole(String role);
+	Role findByRole(String role);
 }

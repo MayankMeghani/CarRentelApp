@@ -4,14 +4,19 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.carRental.dao.PersonRepository;
 import com.carRental.entities.Car;
 import com.carRental.entities.Person;
+import com.carRental.entities.Role;
+import com.carRental.exception.NotFoundException;
 
 @Service
 public class PersonServiceImpl implements PersonService,UserDetailsService {
@@ -29,7 +34,13 @@ public class PersonServiceImpl implements PersonService,UserDetailsService {
 
 	@Override
 	public List<Person> findAll() {
-		return personRepository.findAll();
+		List<Person> persons = personRepository.findAll();
+		if(persons.isEmpty()) {
+			throw new NotFoundException("Did not find car for given renter");
+			}
+			else {
+				return persons;
+			}
 	}
 
 	@Override
@@ -42,7 +53,7 @@ public class PersonServiceImpl implements PersonService,UserDetailsService {
 			thePerson = result.get();
 		}
 		else {
-			throw new RuntimeException("Did not find person id - " + theId);
+			throw new NotFoundException("Did not find Person with  given id ");
 		}
 		
 		
@@ -70,7 +81,27 @@ public class PersonServiceImpl implements PersonService,UserDetailsService {
 					return c;
 				}
 			}
+			throw new NotFoundException("Car is Not Owned by given renter");
+			
 		}
-		return null;
+		else {
+		throw new NotFoundException("No renter is registered with given Id");
+		}
 	}
+
+	@Override
+	public List<Person> findByRole(Role role) {
+		List<Person> persons= personRepository.findByRole(role);
+		if(persons.isEmpty()) {
+		throw new NotFoundException("Did not find car for given renter");
+		}
+		else {
+			return persons;
+		}
+	}
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleBookingException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

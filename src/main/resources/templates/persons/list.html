@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>List of Persons</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+	crossorigin="anonymous">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" th:href="@{/home}">Car Rental System</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/bookings/list}">Bookings</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/cars/list}">Cars</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/persons/list}">Persons</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/roles/list}">Roles</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<h3 class="mt-4 mb-3">Person Directory</h3>
+		<hr>
+
+		<!-- Add a button with Bootstrap styles to add a new person -->
+		<a th:href="@{/persons/add}" class="btn btn-primary mb-3">Add
+			Person</a>
+
+		<table class="table table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>ID</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Phone Number</th>
+					<th>Role</th>
+					<th>Action 1</th>
+					<th>Action 2</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="person : ${persons}">
+					<td th:text="${person.id}" />
+					<td th:text="${person.firstName}" />
+					<td th:text="${person.lastName}" />
+					<td th:text="${person.username}" />
+					<td th:text="${person.email}" />
+					<td th:text="${person.phoneNo}" />
+					<td th:text="${person.role.role}" />
+					<td>
+						<form th:action="@{/persons/update}" method="POST">
+							<input type="hidden" name="personId" th:value="${person.id}" />
+							<button type="submit" class="btn btn-info btn-sm me-1">Update</button>
+						</form>
+					</td>
+					<td>
+						<form th:action="@{/persons/delete}" method="POST">
+							<input type="hidden" name="personId" th:value="${person.id}" />
+							<button type="submit" class="btn btn-danger btn-sm"
+								onclick="return confirm('Are you sure you want to delete this Person?')">Delete</button>
+						</form>
+
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Optional: Bootstrap JavaScript for components -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-5zFYoAcllVV+iK4DDwFYcPQH7rQF1uUvY7Xe6pVT24MfQLZ6rcewq2zclyZCkzV0"
+		crossorigin="anonymous"></script>
+
+</body>
+
+</html>
