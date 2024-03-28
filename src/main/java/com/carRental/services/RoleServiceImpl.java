@@ -67,13 +67,19 @@ public class RoleServiceImpl implements RoleService{
 		roleRepository.deleteById(theId);
 	}
 
-//	@Override
-//	public Role FindByRole(String role) {
-//		return roleRepository.FindByRole(role);
-//	}
-
+	@Override
+	public Role findByRole(String role) {
+		Role r=roleRepository.findByRole(role);
+		if(r==null) {
+		throw new NotFoundException("Role with provided details is not registered");
+		}
+		return r;
+	}
+	
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleBookingException(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+	
 }

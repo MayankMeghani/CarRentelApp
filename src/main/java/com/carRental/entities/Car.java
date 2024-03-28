@@ -4,6 +4,7 @@ import java.time.Year;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,10 +40,10 @@ public class Car {
 
 //    @JsonIgnore
 	@ManyToOne
-    @JoinColumn(name = "renter_Id")
+    @JoinColumn(name = "renter_Id",nullable=false)
 	private Person renter;
 
-	@OneToOne(mappedBy="car")
+	@OneToOne(mappedBy="car",cascade =CascadeType.REMOVE)
 	@JsonIgnore
 	Booking record;
 	

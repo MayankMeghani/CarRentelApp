@@ -4,13 +4,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -50,12 +49,12 @@ public class Person {
 	    private Role role;
 	    
 
-		@OneToMany(mappedBy = "renter")
+		@OneToMany(mappedBy = "renter", cascade=CascadeType.REMOVE)
 		@JsonIgnore
 		private List<Car> cars;
 		
 
-		@OneToMany(mappedBy="customer")
+		@OneToMany(mappedBy="customer", cascade = CascadeType.REMOVE)
 		@JsonIgnore
 		List<Booking> records;
 	    
@@ -78,7 +77,6 @@ public class Person {
 		}
 
 		public Role getRole() {
-			// TODO Auto-generated method stub
 			return role;
 		}
 

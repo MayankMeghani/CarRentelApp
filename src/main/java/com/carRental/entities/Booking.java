@@ -18,7 +18,7 @@ public class Booking {
 	@JoinColumn(name = "customer_Id",nullable =false)
 	private Person customer;
 
-	@OneToOne	
+	@OneToOne
 	@JoinColumn(name = "car_Id",nullable=false)
 	private Car car;
 	

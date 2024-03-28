@@ -2,7 +2,6 @@ package com.carRental.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -90,7 +89,7 @@ public class CarController {
 		return car.getRenter();
 	}
 
-    @PreAuthorize("hasAnyRole('RENTER','ADMIN')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','RENTER','ADMIN')")
 	@GetMapping("/{id}/booking")
 	public Booking FindCarBooking(@PathVariable int id){
     	Car car=carService.findById(id);

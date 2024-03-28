@@ -109,7 +109,7 @@ public class BookingController {
 		}
 		
 
-	    @PreAuthorize("hasRole('ADMIN')")
+	    @PreAuthorize("hasAnyRole('RENTER','ADMIN')")
 		@DeleteMapping("/delete/{id}")
 		public int deleteRecord(@PathVariable int id) {
 	    	Booking record = recordService.findById(id);

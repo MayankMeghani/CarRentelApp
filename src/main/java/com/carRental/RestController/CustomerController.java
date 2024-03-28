@@ -16,15 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Booking;
+import com.carRental.entities.Car;
 import com.carRental.entities.Person;
 import com.carRental.entities.Role;
 import com.carRental.exception.NotFoundException;
 import com.carRental.services.BookingService;
+import com.carRental.services.CarService;
 import com.carRental.services.PersonService;
+import com.carRental.services.RoleService;
 
 @RestController
 @RequestMapping("/customer")
@@ -34,7 +36,10 @@ public class CustomerController {
 	PersonService personService;
 	@Autowired
 	BookingService bookingService;
-
+	@Autowired
+	RoleService roleService;
+	@Autowired
+	CarService carService;
 	@GetMapping("")
 	public String home() {
 		return "Welcome to Customre Section "
@@ -56,6 +61,9 @@ public class CustomerController {
         		customers.add(p);
         	}
         }
+        	if(customers.isEmpty()) {
+    			throw new NotFoundException("Did not find any customer");
+        	}
         return customers;
     }
 
@@ -83,7 +91,7 @@ public class CustomerController {
     public Person addUser(@RequestBody Person person){
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        Role role=new Role(3,"CUSTOMER",null);
+        Role role=roleService.findByRole("CUSTOMER");
         person.setRole(role);
         personService.save(person);
         return person;
@@ -106,7 +114,16 @@ public class CustomerController {
     @PreAuthorize("hasRole('ADMIN')")
     public int deleteUser(@PathVariable int id){
     	Person person=personService.findById(id);
-    	if((person.getRole().getRole()).equals("CUSTOMER")) {	
+    	if((person.getRole().getRole()).equals("CUSTOMER")) {
+    	Person Customer=personService.findById(id);
+    	List<Booking> bookings = bookingService.findByCustomer(Customer);
+    	if(!bookings.isEmpty()) {
+    		for(Booking b:bookings) {
+    			Car c =b.getCar();
+    			c.setAvailable(true);
+    			carService.save(c);
+    		}
+    	}
     	personService.deleteById(id);
     	return id;
     	}

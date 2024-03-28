@@ -29,7 +29,7 @@ public class CarServiceImpl implements CarService{
 	public List<Car> findAll() {
 		List<Car> cars= carRepository.findAll();
 		if(cars.isEmpty()) {
-			throw new NotFoundException("Did not find car for given renter");
+			throw new NotFoundException("Did not find any car");
 		}
 		return cars;	
 	}

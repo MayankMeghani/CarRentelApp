@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class Role {
     private String role;
     
     @JsonIgnore
-    @OneToMany(mappedBy="role")
+    @OneToMany(mappedBy="role",cascade=CascadeType.REMOVE)
     private List<Person> persons;
     
 
@@ -46,10 +47,15 @@ public class Role {
 		return role;
 	}
 
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
 		return "Role [id=" + id + ", role=" + role + ", persons=" + persons + "]";
 	}
+
 	public Role() {
 		super();
 	}
@@ -58,6 +64,12 @@ public class Role {
 		this.id = id;
 		this.role = role;
 		this.persons = persons;
+	}
+	public Role(int id, String role) {
+		super();
+		this.id = id;
+		this.role = role;
+		this.persons = null;
 	}
 
 }

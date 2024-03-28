@@ -36,7 +36,7 @@ public class PersonServiceImpl implements PersonService,UserDetailsService {
 	public List<Person> findAll() {
 		List<Person> persons = personRepository.findAll();
 		if(persons.isEmpty()) {
-			throw new NotFoundException("Did not find car for given renter");
+			throw new NotFoundException("Did not find any person");
 			}
 			else {
 				return persons;
@@ -53,7 +53,7 @@ public class PersonServiceImpl implements PersonService,UserDetailsService {
 			thePerson = result.get();
 		}
 		else {
-			throw new NotFoundException("Did not find Person with  given id ");
+			throw new NotFoundException("Did not find Person with  given id "+theId);
 		}
 		
 		

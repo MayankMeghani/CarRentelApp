@@ -25,6 +25,7 @@ import com.carRental.entities.Role;
 import com.carRental.exception.NotFoundException;
 import com.carRental.services.CarService;
 import com.carRental.services.PersonService;
+import com.carRental.services.RoleService;
 
 
 @RestController
@@ -35,7 +36,8 @@ public class RenterController {
 	PersonService personService;
 	@Autowired
 	CarService carService;
-	
+	@Autowired
+	RoleService roleService;
 
 	@GetMapping("")
 	public String home() {
@@ -60,6 +62,9 @@ public class RenterController {
         		renters.add(p);
         	}
         }
+        if(renters.isEmpty()) {
+			throw new NotFoundException("Did not find any renter");
+        }
         return renters;
     }
 
@@ -81,6 +86,9 @@ public class RenterController {
     	Person p= personService.findById(id);
     	if((p.getRole().getRole()).equals("RENTER")) {
     		List<Car> owned=p.getCars();
+    		if(owned.isEmpty()) {
+    			throw new NotFoundException("No Car is owned by renter");
+    		}
     		return owned;
     	}
     	else {
@@ -99,7 +107,7 @@ public class RenterController {
     public Person addUser(@RequestBody Person person){
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        Role role=new Role(2,"RENTER",null);
+        Role role=roleService.findByRole("RENTER");
         person.setRole(role);
         personService.save(person);
         return person;
