@@ -16,7 +16,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/home}">Car Rental System</a>
+			<a class="navbar-brand" th:href="@{/}">Car Rental System</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false"
@@ -35,6 +35,7 @@
 						th:href="@{/roles/list}">Roles</a></li>
 				</ul>
 			</div>
+				  <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
 		</div>
 	</nav>
 	<div class="container">
@@ -56,7 +57,9 @@
 					<th>Phone Number</th>
 					<th>Role</th>
 					<th>Action 1</th>
-					<th>Action 2</th>
+					<th:block th:if="${role == 'ADMIN'}">
+		            <th>Action 2</th>
+		            </th:block>
 				</tr>
 			</thead>
 
@@ -68,21 +71,23 @@
 					<td th:text="${person.username}" />
 					<td th:text="${person.email}" />
 					<td th:text="${person.phoneNo}" />
-					<td th:text="${person.role.role}" />
+					<td th:text="${person.role.name}" />
 					<td>
 						<form th:action="@{/persons/update}" method="POST">
 							<input type="hidden" name="personId" th:value="${person.id}" />
 							<button type="submit" class="btn btn-info btn-sm me-1">Update</button>
 						</form>
 					</td>
-					<td>
-						<form th:action="@{/persons/delete}" method="POST">
-							<input type="hidden" name="personId" th:value="${person.id}" />
-							<button type="submit" class="btn btn-danger btn-sm"
+					
+					<th:block th:if="${role == 'ADMIN'}">
+						<td>
+							<form th:action="@{/persons/delete}" method="POST">
+								<input type="hidden" name="personId" th:value="${person.id}" />
+								<button type="submit" class="btn btn-danger btn-sm"
 								onclick="return confirm('Are you sure you want to delete this Person?')">Delete</button>
-						</form>
-
-					</td>
+							</form>
+						</td>
+					</th:block>
 				</tr>
 			</tbody>
 		</table>

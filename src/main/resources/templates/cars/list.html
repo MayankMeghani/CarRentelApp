@@ -20,7 +20,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/home}">Car Rental System</a>
+			<a class="navbar-brand" th:href="@{/}">Car Rental System</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false"
@@ -39,6 +39,7 @@
 						th:href="@{/roles/list}">Roles</a></li>
 				</ul>
 			</div>
+			      <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
 		</div>
 	</nav>
 
@@ -48,8 +49,9 @@
 
 
 		<!-- Add a button with Bootstrap styles -->
+		<th:block th:if="${role == 'ADMIN' or role == 'RENTER'}">
 		<a th:href="@{/cars/add}" class="btn btn-primary mb-3">Add Car</a>
-
+		</th:block>
 		<table class="table table-bordered">
 			<thead class="table-dark">
 				<tr>
@@ -60,7 +62,9 @@
 					<th>Price</th>
 					<th>Renting Period(Days)</th>
 					<th>Availability</th>
+					<th:block th:if="${role == 'ADMIN' or role=='RENTER'}">
 					<th>Action</th>
+					</th:block>
 				</tr>
 			</thead>
 
@@ -73,9 +77,11 @@
 					<td th:text="${car.price}" />
 					<td th:text="${car.rentingPeriod}" />
 					<td th:text="${car.available ? 'Available' : 'Not Available'}" />
+					<th:block th:if="${role == 'ADMIN' or role=='RENTER'}">
+					
 					<td>
 						<div class="row">
-
+								
 							<div class="col">
 								<!-- Add "update" button/link -->
 								<form th:action="@{/cars/update}" method="POST">
@@ -94,6 +100,7 @@
 
 						</div>
 					</td>
+					</th:block>
 				</tr>
 			</tbody>
 		</table>

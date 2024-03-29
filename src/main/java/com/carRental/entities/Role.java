@@ -20,7 +20,7 @@ public class Role {
 	private int id;
 	
     @Column(name = "role", nullable = false)
-    private String role;
+    private String name;
     
     @JsonIgnore
     @OneToMany(mappedBy="role", cascade=CascadeType.REMOVE)
@@ -43,13 +43,17 @@ public class Role {
 		this.persons = persons;
 	}
 
-	public String getRole() {
-		return role;
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String role) {
+		this.name = role;
 	}
 
 	@Override
 	public String toString() {
-		return "Role [id=" + id + ", role=" + role + ", persons=" + persons + "]";
+		return "Role [id=" + id + ", role=" + name + ", persons=" + persons + "]";
 	}
 	public Role() {
 		super();
@@ -57,7 +61,7 @@ public class Role {
 	public Role(int id, String role, List<Person> persons) {
 		super();
 		this.id = id;
-		this.role = role;
+		this.name = role;
 		this.persons = persons;
 	}
 

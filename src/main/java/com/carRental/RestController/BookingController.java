@@ -82,7 +82,7 @@ public class BookingController {
 			Car car= carService.findById(record.getCar().getId());
 	    	if( car.isAvailable() ) {
 	    		Person customer = personService.findById(record.getCustomer().getId());
-		    	if((customer.getRole().getRole()).equals("CUSTOMER") ) {
+		    	if((customer.getRole().getName()).equals("CUSTOMER") ) {
 				    car.setAvailable(false);
 			    	carService.save(car);
 			    	record.setCar(car);

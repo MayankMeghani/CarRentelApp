@@ -74,7 +74,7 @@ public class PersonServiceImpl implements PersonService,UserDetailsService {
 	@Override
 	public Car FindCarByrenter(int renter_id, int car_id) {
 		Person person= findById(renter_id);
-		if((person.getRole().getRole()).equals("RENTER")) {
+		if((person.getRole().getName()).equals("RENTER")) {
 			List<Car> all = person.getCars();
 			for(Car c:all) {
 				if(c.getId()==car_id) {
@@ -104,4 +104,10 @@ public class PersonServiceImpl implements PersonService,UserDetailsService {
     public ResponseEntity<String> handleBookingException(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+	@Override
+	public Person findByUsername(String username) {
+		Person p=personRepository.findByUsername(username);
+		return p;
+	}
 }

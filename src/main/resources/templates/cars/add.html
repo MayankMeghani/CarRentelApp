@@ -12,7 +12,13 @@
 
 <body>
     <div class="container">
+        <span th:if="${car.model == null}"> 
         <h2 class="mt-4 mb-3">Add Car</h2>
+        </span>
+        <span th:if="${car.model != null}"> 
+        <h2 class="mt-4 mb-3">Update Car</h2>
+        </span>
+        
         <form action="#" th:action="@{/cars/save}" method="POST" th:object="${car}" >
     <!-- Corrected typo in th:field -->
 		    <input type="hidden" th:field="*{id}" />

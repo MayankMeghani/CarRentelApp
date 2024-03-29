@@ -1,9 +1,14 @@
 package com.carRental.controller;
 
+import com.carRental.entities.Person;
 import com.carRental.entities.Role;
+import com.carRental.services.PersonService;
 import com.carRental.services.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +21,8 @@ public class RoleMvcController {
 
     @Autowired
     private RoleService roleService;
-
+    @Autowired
+    private PersonService personService;
     public RoleMvcController(RoleService roleService) {
         this.roleService = roleService;
     }
@@ -25,6 +31,17 @@ public class RoleMvcController {
     public String listRoles(Model model) {
         List<Role> roles = roleService.findAll();
         model.addAttribute("roles", roles);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication != null) {
+	        Object principal = authentication.getPrincipal();
+	        if (principal instanceof UserDetails) {
+	            UserDetails userDetails = (UserDetails) principal;
+	            String username = userDetails.getUsername();
+	            model.addAttribute("username", username);
+	            Person user= personService.findByUsername(username);
+	            model.addAttribute("position",user.getRole().getName());
+	        }
+	    }
         return "roles/list";
     }
 

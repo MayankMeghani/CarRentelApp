@@ -57,7 +57,7 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     public Person userById(@PathVariable int id){
     	Person person=personService.findById(id);
-    	if((person.getRole().getRole()).equals("ADMIN")) {
+    	if((person.getRole().getName()).equals("ADMIN")) {
     	return personService.findById(id);
     	}
     	else {
@@ -76,7 +76,7 @@ public class PersonController {
     public Person addUser(@RequestBody Person person){
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        Role role=roleService.findByRole("ADMIN");
+        Role role=roleService.findByName("ADMIN");
         person.setRole(role);
         personService.save(person);
         return person;
@@ -85,7 +85,7 @@ public class PersonController {
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
     public Person updateUser(@PathVariable int id, @RequestBody Person person){
-    	if((person.getRole().getRole()).equals("ADMIN")) {
+    	if((person.getRole().getName()).equals("ADMIN")) {
     	personService.save(person); 
     	return person;
     	}
@@ -98,7 +98,7 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     public int deleteUser(@PathVariable int id){
     	Person person=personService.findById(id);
-    	if((person.getRole().getRole()).equals("ADMIN")) {
+    	if((person.getRole().getName()).equals("ADMIN")) {
     	personService.deleteById(id);
     	return id;
     	}

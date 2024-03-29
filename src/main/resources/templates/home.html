@@ -35,9 +35,20 @@
                     </li>
                 </ul>
             </div>
-            <!-- <a th:href="@{/logout}" class="btn btn-primary">Logout</a> -->
+            <div th:if="${username == null}"> 
+           <a th:href="@{/login}" class="btn btn-primary">Login</a>
+           
+            <a th:href="@{/persons/add}" class="btn btn-primary">Signup</a>
+           </div>
+            <div th:if="${username != null}">      
+            <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+        </div>
         </div>
     </nav>
+	  <div th:if="${username != null}">
+        <h1>Welcome, <span th:text="${username}"></span>!</h1>
+        <h3>Role : <span th:text="${role}"></span> </h3>
+    </div>
 
     <!-- Main Content -->
     <div class="container mt-4">

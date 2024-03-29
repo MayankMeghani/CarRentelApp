@@ -6,7 +6,7 @@ import com.carRental.entities.Role;
 
 public interface RoleService {
 
-	Role findByRole(String role);
+	Role findByName(String role);
 
 	List<Role> findAll();
 	

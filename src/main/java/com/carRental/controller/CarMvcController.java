@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,15 +37,22 @@ public class CarMvcController {
 
     
     
-    @GetMapping("/home")
-    public String home() {
-        return "home";
-    }
 
     @GetMapping("/list")
     public String listCars(Model model) {
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("renters",personService.findAll() );
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication != null) {
+	        Object principal = authentication.getPrincipal();
+	        if (principal instanceof UserDetails) {
+	            UserDetails userDetails = (UserDetails) principal;
+	            String username = userDetails.getUsername();
+	            model.addAttribute("username", username);
+	            Person user= personService.findByUsername(username);
+	            model.addAttribute("role",user.getRole().getName());
+	        }
+	    }
         return "cars/list";
     }
 
@@ -52,7 +62,7 @@ public class CarMvcController {
         List<Person> persons= personService.findAll();
         List<Person> renters = new ArrayList<Person>();
         for(Person p:persons) {
-        	if((p.getRole().getRole()).equals("RENTER")) {
+        	if((p.getRole().getName()).equals("RENTER")) {
         		renters.add(p);
         	}
         }
@@ -73,7 +83,7 @@ public class CarMvcController {
     	List<Person> persons= personService.findAll();
         List<Person> renters = new ArrayList<Person>();
         for(Person p:persons) {
-        	if((p.getRole().getRole()).equals("RENTER")) {
+        	if((p.getRole().getName()).equals("RENTER")) {
         		renters.add(p);
         	}
         }
@@ -88,7 +98,7 @@ public class CarMvcController {
     	List<Person> persons= personService.findAll();
         List<Person> renters = new ArrayList<Person>();
         for(Person p:persons) {
-        	if((p.getRole().getRole()).equals("RENTER")) {
+        	if((p.getRole().getName()).equals("RENTER")) {
         		renters.add(p);
         	}
         }

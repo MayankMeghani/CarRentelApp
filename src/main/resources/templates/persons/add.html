@@ -12,7 +12,12 @@
 
 <body>
     <div class="container">
+        <span th:if="${person.username == null}"> 
         <h2 class="mt-4 mb-3">Add Person</h2>
+        </span>
+        <span th:if="${person.username != null}"> 
+        <h2 class="mt-4 mb-3">Update Person</h2>
+        </span>
         <form action="#" th:action="@{/persons/save}" method="POST" th:object="${person}">
         	<input type="hidden" th:field="*{id}" />
             <div class="mb-3">
@@ -44,10 +49,16 @@
                 <select th:field="*{role.id}" id="role" class="form-control" required>
                     <!-- Populate the dropdown options with data fetched from the database -->
                     <option th:each="role : ${roles}" th:value="${role.id}"
-                        th:text="${role.role}"></option>
+                        th:text="${role.name}"></option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
+            <span th:if="${username}"> 
+            <a th:href="@{/persons/list}" class="btn btn-warning">Back to List</a>
+            </span>
+            <span th:if="${username == null}"> 
+            <a th:href="@{/}" class="btn btn-warning">Back</a>
+            </span>
         </form>
     </div>
 </body>

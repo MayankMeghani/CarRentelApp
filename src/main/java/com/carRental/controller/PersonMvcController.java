@@ -8,6 +8,9 @@ import com.carRental.services.PersonService;
 import com.carRental.services.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +39,17 @@ public class PersonMvcController {
     public String listPersons(Model model) {
         List<Person> persons = personService.findAll();
         model.addAttribute("persons", persons);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication != null) {
+	        Object principal = authentication.getPrincipal();
+	        if (principal instanceof UserDetails) {
+	            UserDetails userDetails = (UserDetails) principal;
+	            String username = userDetails.getUsername();
+	            model.addAttribute("username", username);
+	            Person user= personService.findByUsername(username);
+	            model.addAttribute("role",user.getRole().getName());
+	        }
+	    }
         return "persons/list";
     }
 
@@ -43,7 +57,15 @@ public class PersonMvcController {
     public String showAddForm(Model model) {
         model.addAttribute("roles", roleService.findAll());
     	model.addAttribute("person", new Person());
-        
+    	 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+ 	    if (authentication != null) {
+ 	        Object principal = authentication.getPrincipal();
+ 	        if (principal instanceof UserDetails) {
+ 	            UserDetails userDetails = (UserDetails) principal;
+ 	            String username = userDetails.getUsername();
+ 	            model.addAttribute("username", username);
+ 	        }
+ 	    }
         return "persons/add";
     }
 
@@ -73,7 +95,7 @@ public class PersonMvcController {
     @PostMapping("/delete")
     public String deletePerson(@RequestParam("personId") int id) {
     	Person p=personService.findById(id);
-    	if(p.getRole().getRole().equals("CUSTOMER")) {
+    	if(p.getRole().getName().equals("CUSTOMER")) {
     		List<Booking> bookings = bookingService.findByCustomer(p);
     		if(!bookings.isEmpty()) {
     			for(Booking b:bookings) {

@@ -64,6 +64,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 
 @Configuration
 @EnableWebSecurity
@@ -86,7 +88,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/","/home", "/car","/customer","/renter","/person","/booking","/role").permitAll()
+				.requestMatchers("/","/home","/persons/add", "/car","/customer","/renter","/person","/booking","/role").permitAll()
 				
 				.anyRequest().authenticated()
 			)
@@ -98,7 +100,11 @@ public class SecurityConfiguration {
 			)
 //			.httpBasic(Customizer.withDefaults())
 			.logout((logout) -> logout
-			.permitAll());
+			.permitAll()
+			.logoutSuccessHandler((request, response, authentication) -> {
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.sendRedirect("/");
+            }));
 
 		return http.build();
 	}

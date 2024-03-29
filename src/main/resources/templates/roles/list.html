@@ -16,7 +16,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/home}">Car Rental System</a>
+			<a class="navbar-brand" th:href="@{/}">Car Rental System</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false"
@@ -35,6 +35,7 @@
 						th:href="@{/roles/list}">Roles</a></li>
 				</ul>
 			</div>
+			    <a th:href="@{/logout}" class="btn btn-primary">Logout</a>
 		</div>
 	</nav>
 	<div class="container">
@@ -42,35 +43,48 @@
 		<hr>
 
 		<!-- Add a button with Bootstrap styles to add a new role -->
-		<a th:href="@{/roles/add}" class="btn btn-primary mb-3">Add Role</a>
+		<th:block th:if="${position == 'ADMIN'}">
+    <a th:href="@{/roles/add}" class="btn btn-primary mb-3">Add Role</a>
+		</th:block>
+		
 
 		<table class="table table-bordered">
 			<thead class="table-dark">
 				<tr>
 					<th>ID</th>
 					<th>Role Name</th>
-					<th>Action 1</th>
-					<th>Action 2</th>
+					<th:block th:if="${position == 'ADMIN'}">
+					<th>Action</th>
+					</th:block>
 				</tr>
 			</thead>
 
 			<tbody>
 				<tr th:each="role : ${roles}">
 					<td th:text="${role.id}" />
-					<td th:text="${role.role}" />
+					<td th:text="${role.name}" />
+					
+					<th:block th:if="${position == 'ADMIN'}">
 					<td>
-						<form th:action="@{/roles/update}" method="POST">
-							<input type="hidden" name="roleId" th:value="${role.id}" />
-							<button type="submit" class="btn btn-info btn-sm me-1">Update</button>
-						</form>
-					</td>
-					<td>
-						<form th:action="@{/roles/delete}" method="POST">
-							<input type="hidden" name="roleId" th:value="${role.id}" />
-							<button type="submit" class="btn btn-danger btn-sm"
-								onclick="return confirm('Are you sure you want to delete this Role?')">Delete</button>
-						</form>
-					</td>
+						<div class="row">		
+							<div class="col">
+					
+							<form th:action="@{/roles/update}" method="POST">
+								<input type="hidden" name="roleId" th:value="${role.id}" />
+								<button type="submit" class="btn btn-info btn-sm me-1"
+								style="float: left;">Update</button>
+								
+							</form>
+					
+							<form th:action="@{/roles/delete}" method="POST">
+								<input type="hidden" name="roleId" th:value="${role.id}" />
+								<button type="submit" class="btn btn-danger btn-sm"
+									onclick="return confirm('Are you sure you want to delete this Role?')">Delete</button>
+							</form>
+							</div>
+							</div>
+						</td>
+					</th:block>
 				</tr>
 			</tbody>
 		</table>

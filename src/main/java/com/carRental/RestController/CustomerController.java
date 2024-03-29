@@ -59,7 +59,7 @@ public class CustomerController {
         List<Person> persons= personService.findAll();
         List<Person> customers = new ArrayList<Person>(); ;
         for(Person p:persons) {
-        	if((p.getRole().getRole()).equals("CUSTOMER")) {
+        	if((p.getRole().getName()).equals("CUSTOMER")) {
         		customers.add(p);
         	}
         }
@@ -73,7 +73,7 @@ public class CustomerController {
     @PreAuthorize("hasAnyRole('ADMIN','RENTER','CUSTOMER')")
     public Person userById(@PathVariable int id){
     	Person p= personService.findById(id);
-    	if((p.getRole().getRole()).equals("CUSTOMER")) {
+    	if((p.getRole().getName()).equals("CUSTOMER")) {
     		return p;
     	}
     	else {
@@ -93,7 +93,7 @@ public class CustomerController {
     public Person addUser(@RequestBody Person person){
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        Role role=roleService.findByRole("CUSTOMER");
+        Role role=roleService.findByName("CUSTOMER");
         person.setRole(role);
         personService.save(person);
         return person;
@@ -103,7 +103,7 @@ public class CustomerController {
     @PreAuthorize("hasAnyRole('ADMIN','RENTER','CUSTOMER')")
     public Person updateUser(@PathVariable int id, @RequestBody Person person){
     	person.setId(id);
-    	if((person.getRole().getRole()).equals("CUSTOMER")) {	
+    	if((person.getRole().getName()).equals("CUSTOMER")) {	
 		personService.save(person); 
     	return person;
     	}
@@ -116,7 +116,7 @@ public class CustomerController {
     @PreAuthorize("hasRole('ADMIN')")
     public int deleteUser(@PathVariable int id){
     	Person person=personService.findById(id);
-    	if((person.getRole().getRole()).equals("CUSTOMER")) {
+    	if((person.getRole().getName()).equals("CUSTOMER")) {
     	Person Customer=personService.findById(id);
     	List<Booking> bookings = bookingService.findByCustomer(Customer);
     	if(!bookings.isEmpty()) {

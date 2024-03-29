@@ -8,6 +8,9 @@ import com.carRental.services.CarService;
 import com.carRental.services.PersonService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +41,17 @@ public class BookingMvcController {
         model.addAttribute("bookings", bookings);
         model.addAttribute("cars", carService.findAll());
         model.addAttribute("customers", personService.findAll());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication != null) {
+	        Object principal = authentication.getPrincipal();
+	        if (principal instanceof UserDetails) {
+	            UserDetails userDetails = (UserDetails) principal;
+	            String username = userDetails.getUsername();
+	            model.addAttribute("username", username);
+	            Person user= personService.findByUsername(username);
+	            model.addAttribute("role",user.getRole().getName());
+	        }
+	    }
         
         return "bookings/list";
     }
@@ -55,7 +69,7 @@ public class BookingMvcController {
         List<Person> persons = personService.findAll();
         List<Person> customers = new ArrayList<Person>();
         for(Person p : persons) {
-        	if(p.getRole().getRole().equals("CUSTOMER")) {
+        	if(p.getRole().getName().equals("CUSTOMER")) {
         		customers.add(p);
         	}
         }
@@ -99,7 +113,7 @@ public class BookingMvcController {
         List<Person> persons = personService.findAll();
         List<Person> customers = new ArrayList<Person>();
         for(Person p : persons) {
-        	if(p.getRole().getRole().equals("CUSTOMER")) {
+        	if(p.getRole().getName().equals("CUSTOMER")) {
         		customers.add(p);
         	}
         }

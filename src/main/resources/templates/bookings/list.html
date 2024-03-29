@@ -16,7 +16,7 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" th:href="@{/home}">Car Rental System</a>
+			<a class="navbar-brand" th:href="@{/}">Car Rental System</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNav"
 				aria-controls="navbarNav" aria-expanded="false"
@@ -35,6 +35,7 @@
 						th:href="@{/roles/list}">Roles</a></li>
 				</ul>
 			</div>
+			<a th:href="@{/logout}" class="btn btn-primary">Logout</a>
 		</div>
 	</nav>
 	<div class="container">
@@ -42,17 +43,18 @@
 		<hr>
 
 		<!-- Add a button with Bootstrap styles to add a new booking -->
-		<a th:href="@{/bookings/add}" class="btn btn-primary mb-3">Add
-			Booking</a>
-
+		<th:block th:if="${role == 'ADMIN' or role == 'CUSTOMER'}">
+		<a th:href="@{/bookings/add}" class="btn btn-primary mb-3">Add Booking</a>
+		</th:block>
 		<table class="table table-bordered">
 			<thead class="table-dark">
 				<tr>
 					<th>ID</th>
 					<th>Car</th>
 					<th>Customer</th>
-					<th>Action 1</th>
-					<th>Action 2</th>
+					<th:block th:if="${role == 'ADMIN' or role == 'RENTER'}">
+					<th>Action </th>
+					</th:block>
 				</tr>
 			</thead>
 
@@ -62,19 +64,30 @@
 					<td th:text="${booking.car.model}" />
 					<td
 						th:text="${booking.customer.firstName + ' ' + booking.customer.lastName}" />
+					
+					<th:block th:if="${role == 'ADMIN' or role == 'RENTER'}">
+					
 					<td>
+					
+						<div class="row">
+								
+							<div class="col">
+						
 						<form th:action="@{/bookings/update}" method="POST">
 							<input type="hidden" name="bookingId" th:value="${booking.id}" />
-							<button type="submit" class="btn btn-info btn-sm me-1">Update</button>
+							<button type="submit" class="btn btn-info btn-sm me-1"
+							style="float: left;">Update</button>
 						</form>
-					</td>
-					<td>
+					
 						<form th:action="@{/bookings/delete}" method="POST">
 							<input type="hidden" name="bookingId" th:value="${booking.id}" />
 							<button type="submit" class="btn btn-danger btn-sm"
 								onclick="return confirm('Are you sure you want to delete this Booking?')">Delete</button>
 						</form>
+						</div>
+						</div>
 					</td>
+					</th:block>
 				</tr>
 			</tbody>
 		</table>

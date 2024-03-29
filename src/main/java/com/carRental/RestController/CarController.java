@@ -104,7 +104,7 @@ public class CarController {
     	Person renter=car.getRenter();
     	int id= renter.getId();
 		renter = personService.findById(id);
-		if((renter.getRole().getRole()).equals("RENTER")) {
+		if((renter.getRole().getName()).equals("RENTER")) {
     	car.setRenter(renter);
     	car.setAvailable(true);
 		carService.save(car);

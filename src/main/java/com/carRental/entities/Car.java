@@ -33,6 +33,7 @@ public class Car {
 	@Column(columnDefinition = "SMALLINT", nullable=false)
     private Year year;
 	private int price;
+	@Column(columnDefinition = "SMALLINT")
 	private int rentingPeriod;
 	boolean available;
 	
@@ -99,8 +100,8 @@ public class Car {
 	public int getRentingPeriod() {
 		return rentingPeriod;
 	}
-	public void setgetRentingPeriod(int renting_period) {
-		this.rentingPeriod = renting_period;
+	public void setRentingPeriod(int rentingPeriod) {
+		this.rentingPeriod = rentingPeriod;
 	}
 	
 	@Override
