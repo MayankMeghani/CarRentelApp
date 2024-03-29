@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import com.carRental.entities.Booking;
@@ -133,6 +135,7 @@ public class CustomerController {
 			throw new NotFoundException("No Customer is registerd for given Id");
     	}    
     }    
+    }
 
 
     @ExceptionHandler(NotFoundException.class)

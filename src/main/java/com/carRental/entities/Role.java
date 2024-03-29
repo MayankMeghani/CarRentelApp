@@ -23,7 +23,7 @@ public class Role {
     private String name;
     
     @JsonIgnore
-    @OneToMany(mappedBy="role", cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy="role",cascade=CascadeType.REMOVE)
     private List<Person> persons;
     
 
@@ -51,10 +51,15 @@ public class Role {
 		this.name = role;
 	}
 
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public String toString() {
 		return "Role [id=" + id + ", role=" + name + ", persons=" + persons + "]";
 	}
+
 	public Role() {
 		super();
 	}
@@ -63,6 +68,12 @@ public class Role {
 		this.id = id;
 		this.name = role;
 		this.persons = persons;
+	}
+	public Role(int id, String role) {
+		super();
+		this.id = id;
+		this.role = role;
+		this.persons = null;
 	}
 
 }
