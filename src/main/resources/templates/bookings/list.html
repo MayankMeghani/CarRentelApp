@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+	crossorigin="anonymous">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" th:href="@{/}">Car Rental System</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/bookings/list}">Bookings</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/cars/list}">Cars</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/persons/list}">Persons</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/roles/list}">Roles</a></li>
+				</ul>
+			</div>
+			<a th:href="@{/logout}" class="btn btn-primary">Logout</a>
+		</div>
+	</nav>
+	<div class="container">
+		<h3 class="mt-4 mb-3">Booking Directory</h3>
+		<hr>
+
+		<!-- Add a button with Bootstrap styles to add a new booking -->
+		<th:block th:if="${role == 'ADMIN' or role == 'CUSTOMER'}">
+		<a th:href="@{/bookings/add}" class="btn btn-primary mb-3">Add Booking</a>
+		</th:block>
+		<table class="table table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>ID</th>
+					<th>Car</th>
+					<th>Customer</th>
+					<th>Action </th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="booking : ${bookings}">
+					<td th:text="${booking.id}" />
+					<td th:text="${booking.car.model}" />
+					<td
+						th:text="${booking.customer.firstName + ' ' + booking.customer.lastName}" />
+					
+					
+					<td>
+					
+						<div class="row">
+								
+							<div class="col">
+						
+						<form th:action="@{/bookings/update}" method="POST">
+							<input type="hidden" name="bookingId" th:value="${booking.id}" />
+							<button type="submit" class="btn btn-info btn-sm me-1"
+							style="float: left;">Update</button>
+						</form>
+					<th:block th:if="${role == 'ADMIN' or role == 'RENTER'}">
+					
+						<form th:action="@{/bookings/delete}" method="POST">
+							<input type="hidden" name="bookingId" th:value="${booking.id}" />
+							<button type="submit" class="btn btn-danger btn-sm"
+								onclick="return confirm('Are you sure you want to delete this Booking?')">Delete</button>
+						</form>
+						
+					</th:block>
+						</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Add your scripts and Bootstrap JavaScript here -->
+</body>
+
+</html>
