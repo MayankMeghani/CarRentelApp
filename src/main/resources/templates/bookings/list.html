@@ -52,6 +52,13 @@
 					<th>ID</th>
 					<th>Car</th>
 					<th>Customer</th>
+					<th:block th:if="${role == 'RENTER' or role == 'ADMIN'}">
+					<th>Customer's Contact Info</th>
+					</th:block>
+					<th:block th:if="${role == 'ADMIN' or role == 'CUSTOMER'}">
+					<th>Renter</th>
+					<th>Renter's Contact Info</th>
+					</th:block>
 					<th>Action </th>
 				</tr>
 			</thead>
@@ -60,16 +67,26 @@
 				<tr th:each="booking : ${bookings}">
 					<td th:text="${booking.id}" />
 					<td th:text="${booking.car.model}" />
-					<td
-						th:text="${booking.customer.firstName + ' ' + booking.customer.lastName}" />
-					
-					
+					<td th:text="${booking.customer.firstName + ' ' + booking.customer.lastName}" />
+					<th:block th:if="${role == 'RENTER' or role == 'ADMIN'}">
 					<td>
+					<span th:text="${booking.customer.phoneNo}"/><br>
+					<span th:text="${booking.customer.email}"/>
+					</td>
+					</th:block>
 					
+					<th:block th:if="${role == 'ADMIN' or role == 'CUSTOMER'}">
+					<td th:text="${booking.car.renter.firstName + ' ' + booking.car.renter.lastName}"/>
+					<td>
+					<span th:text="${booking.car.renter.phoneNo}"/><br>
+					<span th:text="${booking.car.renter.email}"/>
+					</td>
+					</th:block>
+					<td>
 						<div class="row">
 								
 							<div class="col">
-						
+							
 						<form th:action="@{/bookings/update}" method="POST">
 							<input type="hidden" name="bookingId" th:value="${booking.id}" />
 							<button type="submit" class="btn btn-info btn-sm me-1"

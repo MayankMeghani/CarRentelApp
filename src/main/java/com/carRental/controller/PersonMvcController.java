@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -70,11 +72,19 @@ public class PersonMvcController {
     }
 
     @PostMapping("/save")
-    public String savePerson(@ModelAttribute("person") Person person) {
+    public String savePerson(@ModelAttribute("person") Person person, Model model, RedirectAttributes redirectAttributes){
     	BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder(10);
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        personService.save(person);
-        return "redirect:/persons/list";
+        try {
+            personService.save(person);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            model.addAttribute("errorMessage", "An error occurred while saving the person: " + e.getMessage());
+            return "redirect:/persons/add";
+        }        
+        model.addAttribute("successMessage","New User registed succesfully!");
+        return "redirect:/";
+        
     }
 
     @GetMapping("/update/{id}")
@@ -87,7 +97,7 @@ public class PersonMvcController {
     @PostMapping("/update")
     public String updatePerson(@RequestParam("personId") int id ,Model model) {
     	Person person = personService.findById(id);
-    	model.addAttribute("roles", roleService.findAll());
+    	model.addAttribute("roles", person.getRole());
     	model.addAttribute("person", person);
     	return "/persons/add";
     }
@@ -101,6 +111,18 @@ public class PersonMvcController {
     			for(Booking b:bookings) {
     				b.getCar().setAvailable(true);
     			}
+    		}
+    	}
+    	else if(p.getRole().getName().equals("ADMIN")) {
+       	 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  	        Object principal = authentication.getPrincipal();
+  	        UserDetails userDetails = (UserDetails) principal;
+  	        String username = userDetails.getUsername();
+    		Person c = personService.findByUsername(username);
+    		if(p.equals(c)) {
+                SecurityContextHolder.getContext().setAuthentication(null);
+    	        personService.deleteById(id);
+    	        return "redirect:/";
     		}
     	}
         personService.deleteById(id);

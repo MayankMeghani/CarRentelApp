@@ -50,9 +50,9 @@
 			<thead class="table-dark">
 				<tr>
 					<th>ID</th>
+					<th>Username</th>
 					<th>First Name</th>
 					<th>Last Name</th>
-					<th>Username</th>
 					<th>Email</th>
 					<th>Phone Number</th>
 					<th>Role</th>
@@ -66,9 +66,9 @@
 			<tbody>
 				<tr th:each="person : ${persons}">
 					<td th:text="${person.id}" />
+					<td th:text="${person.username}" />
 					<td th:text="${person.firstName}" />
 					<td th:text="${person.lastName}" />
-					<td th:text="${person.username}" />
 					<td th:text="${person.email}" />
 					<td th:text="${person.phoneNo}" />
 					<td th:text="${person.role.name}" />

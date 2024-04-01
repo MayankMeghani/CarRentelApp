@@ -48,7 +48,9 @@
         <h1>Welcome, <span th:text="${username}"></span>!</h1>
         <h3>Role : <span th:text="${role}"></span> </h3>
     </div>
-
+	<div th:if="${successMessage}" class="alert alert-success" role="alert">
+    	<span th:text="${successMessage}"></span>
+	</div>
     <!-- Main Content -->
     <div class="container mt-4">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
